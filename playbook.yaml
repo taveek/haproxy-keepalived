@@ -44,27 +44,9 @@
         update_cache: true
     
     - name: append configurations
-      blockinfile:
-        path: /etc/haproxy/haproxy.cfg
-        block: |
-          frontend web-frontend
-            bind *:80
-            mode http
-            default_backend web-backend
-        
-          backend web-backend
-            balance roundrobin
-            server web1 {{ hostvars['web-01'].ansible_host }}:80 check
-            server web2 {{ hostvars['web-02'].ansible_host }}:80 check
-
-          listen stats
-            bind {{ haproxy_stats_bind }}
-            mode http
-            stats enable
-            stats hide-version
-            stats realm Haproxy\ Statistics
-            stats uri /
-            stats auth {{ haproxy_stats_creds }}
+      template:
+        src: haproxy-cfg.j2
+        dest: /etc/haproxy/haproxy.cfg
 
     - name: start haproxy
       systemd:
