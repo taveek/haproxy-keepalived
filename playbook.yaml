@@ -18,6 +18,22 @@
   hosts: proxy 
 
   tasks:
+    - name: config ip forwarding
+      sysctl:
+        name: net.ipv4.ip_forward
+        value: '1'
+        sysctl_set: yes
+        state: present
+        reload: no
+
+    - name: config non-local ip binding
+      sysctl:
+        name: net.ipv4.ip_nonlocal_bind
+        value: '1'
+        sysctl_set: yes
+        state: present
+        reload: yes
+
     - name: install haproxy
       package:
         name: haproxy
