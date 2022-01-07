@@ -65,10 +65,6 @@
   hosts: proxy 
   become: yes
 
-  vars:
-    ip_master: "{{ hostvars['proxy-01'].ansible_host }}"
-    ip_backup: "{{ hostvars['proxy-02'].ansible_host }}"
-
   tasks:
     - name: install keepalived
       package:
@@ -79,7 +75,6 @@
     - name: configurations - master
       vars:
         ip_state: MASTER
-        ip_pair: ["{{ ip_master }}", "{{ ip_backup }}"]
       template:
         src: keepalived-conf.j2
         dest: /etc/keepalived/keepalived.conf
@@ -88,7 +83,6 @@
     - name: configurations - backup
       vars:
         ip_state: BACKUP
-        ip_pair: ["{{ ip_backup }}", "{{ ip_master }}"]
       template:
         src: keepalived-conf.j2
         dest: /etc/keepalived/keepalived.conf
