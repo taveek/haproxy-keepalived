@@ -1,3 +1,9 @@
+# เตรียมเครื่อง
+
+```sh
+vagrant up
+```
+
 # Execution
 
 ```sh

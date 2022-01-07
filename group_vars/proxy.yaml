@@ -1,2 +1,2 @@
 ip_vrrp: 10.10.0.10
-ip_nic: eth1
+ip_nic: enp0s8

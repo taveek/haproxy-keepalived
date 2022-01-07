@@ -1,6 +1,7 @@
 ---
 - name: setup default backend
   hosts: backend
+  become: yes
 
   tasks:
     - name: install nginx
@@ -17,6 +18,7 @@
 
 - name: setup haproxy
   hosts: proxy 
+  become: yes
 
   tasks:
     - name: config ip forwarding
@@ -61,6 +63,8 @@
 
 - name: setup keepalived
   hosts: proxy 
+  become: yes
+
   vars:
     ip_master: "{{ hostvars['proxy-01'].ansible_host }}"
     ip_backup: "{{ hostvars['proxy-02'].ansible_host }}"
@@ -90,8 +94,8 @@
         dest: /etc/keepalived/keepalived.conf
       when: "'proxy-02' in inventory_hostname"
 
-    - name: start haproxy
+    - name: start keepalived
       systemd:
-        name: haproxy
+        name: keepalived
         state: restarted
         enabled: yes
