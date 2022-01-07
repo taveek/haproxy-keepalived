@@ -1,3 +1,8 @@
+# Execution
+
+```sh
+ansible-playbook -i hosts playbook.yaml
+```
 # References
 
 * [Configure Highly Available HAProxy with Keepalived on Ubuntu 20.04](https://kifarunix.com/configure-highly-available-haproxy-with-keepalived-on-ubuntu-20-04/)
