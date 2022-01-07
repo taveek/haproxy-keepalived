@@ -57,6 +57,15 @@
             server web1 {{ hostvars['web-01'].ansible_host }}:80 check
             server web2 {{ hostvars['web-02'].ansible_host }}:80 check
 
+          listen stats
+            bind {{ haproxy_stats_bind }}
+            mode http
+            stats enable
+            stats hide-version
+            stats realm Haproxy\ Statistics
+            stats uri /
+            stats auth {{ haproxy_stats_creds }}
+
     - name: start haproxy
       systemd:
         name: haproxy
