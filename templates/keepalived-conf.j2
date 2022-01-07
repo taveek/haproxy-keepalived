@@ -44,12 +44,14 @@ vrrp_instance LB_VIP {
     virtual_ipaddress {
         {{ ip_vrrp }}
     }
-  
+
+{% if smtp_alert == 'yes' %}
     smtp_alert          # Enable Notifications Via Email
+{% endif %}
   
     authentication {
         auth_type AH
-        auth_pass myP@ssword	# Password for accessing vrrpd. Same on all devices
+        auth_pass {{ vrrpd_credentials }}	# Password for accessing vrrpd. Same on all devices
     }
 
     # Use the Defined Script to Check whether to initiate a fail over

@@ -1,2 +1,4 @@
 ip_vrrp: 10.10.0.10
 ip_nic: enp0s8
+vrrpd_credentials: vrrpusr@TmcFavZ2JRU3Anvc
+smtp_alert: no
