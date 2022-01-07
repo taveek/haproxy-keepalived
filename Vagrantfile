@@ -24,4 +24,9 @@ Vagrant.configure("2") do |config|
     web1_config.vm.hostname = 'web1'  
     web1_config.vm.network :private_network, ip: "10.10.0.4"
   end
+
+  config.vm.define :web2 do |web2_config|
+    web2_config.vm.hostname = 'web2'  
+    web2_config.vm.network :private_network, ip: "10.10.0.5"
+  end
 end

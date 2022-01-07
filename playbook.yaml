@@ -55,6 +55,7 @@
           backend web-backend
             balance roundrobin
             server web1 {{ hostvars['web-01'].ansible_host }}:80 check
+            server web2 {{ hostvars['web-02'].ansible_host }}:80 check
 
     - name: start haproxy
       systemd:

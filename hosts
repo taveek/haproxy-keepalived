@@ -4,3 +4,4 @@ proxy-02 ansible_host=10.10.0.3 ansible_user=vagrant
 
 [backend]
 web-01 ansible_host=10.10.0.4 ansible_user=vagrant
+web-02 ansible_host=10.10.0.5 ansible_user=vagrant
