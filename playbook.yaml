@@ -13,6 +13,7 @@
       systemd:
         name: nginx
         state: restarted
+        enabled: yes
 
 - name: setup haproxy
   hosts: proxy 
@@ -93,3 +94,4 @@
       systemd:
         name: haproxy
         state: restarted
+        enabled: yes
