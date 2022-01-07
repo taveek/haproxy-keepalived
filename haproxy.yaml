@@ -1,0 +1,79 @@
+---
+- name: setup default backend
+  hosts: backend
+
+  tasks:
+    - name: install nginx
+      package:
+        name: nginx
+        state: present
+        update_cache: true
+
+    - name: start nginx
+      systemd:
+        name: nginx
+        state: restarted
+
+- name: setup haproxy
+  hosts: proxy 
+
+  tasks:
+    - name: install haproxy
+      package:
+        name: haproxy
+        state: present
+        update_cache: true
+    
+    - name: append configurations
+      blockinfile:
+        path: /etc/haproxy/haproxy.cfg
+        block: |
+          frontend web-frontend
+            bind *:80
+            mode http
+            default_backend web-backend
+        
+          backend web-backend
+            balance roundrobin
+            server web1 {{ hostvars['web-01'].ansible_host }}:80 check
+
+    - name: start haproxy
+      systemd:
+        name: haproxy
+        state: restarted
+
+- name: setup keepalived
+  hosts: proxy 
+  vars:
+    ip_master: "{{ hostvars['proxy-01'].ansible_host }}"
+    ip_backup: "{{ hostvars['proxy-02'].ansible_host }}"
+
+  tasks:
+    - name: install keepalived
+      package:
+        name: keepalived
+        state: present
+        update_cache: true
+
+    - name: configurations - master
+      vars:
+        ip_state: MASTER
+        ip_pair: ["{{ ip_master }}", "{{ ip_backup }}"]
+      template:
+        src: keepalived-conf.j2
+        dest: /etc/keepalived/keepalived.conf
+      when: "'proxy-01' in inventory_hostname"
+
+    - name: configurations - backup
+      vars:
+        ip_state: BACKUP
+        ip_pair: ["{{ ip_backup }}", "{{ ip_master }}"]
+      template:
+        src: keepalived-conf.j2
+        dest: /etc/keepalived/keepalived.conf
+      when: "'proxy-02' in inventory_hostname"
+
+    - name: start haproxy
+      systemd:
+        name: haproxy
+        state: restarted

@@ -1,0 +1,6 @@
+[proxy]
+proxy-01 ansible_host=10.10.0.2 ansible_user=root
+proxy-02 ansible_host=10.10.0.3 ansible_user=root
+
+[backend]
+web-01 ansible_host=10.10.0.4 ansible_user=root
